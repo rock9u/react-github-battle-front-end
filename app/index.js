@@ -1,10 +1,10 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import "./index.css";
+import React from 'react'
+import ReactDOM from 'react-dom'
+import './index.css'
 import Popular from './components/Popular'
 
 class App extends React.Component {
-  render() {
+  render () {
     return (
       <div className='container'>
         <Popular />
@@ -13,4 +13,4 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(<App />, document.getElementById("root"));
+ReactDOM.render(<App />, document.getElementById('root'))

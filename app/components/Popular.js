@@ -1,56 +1,87 @@
-import React from "react";
-import propTypes from "prop-types";
+import React from 'react'
+import propTypes from 'prop-types'
+import { fetchPopularRepos } from '../utils/api'
 
-function LanguageNav({ selected, onUpdateLanguage }) {
-  const languages = ["All", "JavaScript", "Ruby", "Java", "CSS", "Python"];
+function LanguageNav ({ selected, onUpdateLanguage }) {
+  const languages = ['All', 'JavaScript', 'Ruby', 'Java', 'CSS', 'Python']
   return (
-    <ul className="flex-center">
+    <ul className='flex-center'>
       {languages.map((language) => {
         return (
           <li key={language}>
             <button
-              className="btn-clear nav-link"
-              style={language === selected ? { color: "paleVioletRed" } : null}
+              className='btn-clear nav-link'
+              style={language === selected ? { color: 'paleVioletRed' } : null}
               onClick={() => onUpdateLanguage(language)}
             >
               {language}
             </button>
           </li>
-        );
+        )
       })}
     </ul>
-  );
+  )
 }
 
 LanguageNav.propTypes = {
   selected: propTypes.string.isRequired,
-  onUpdateLanguage: propTypes.func.isRequired,
-};
+  onUpdateLanguage: propTypes.func.isRequired
+}
 
 export default class Popular extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor (props) {
+    super(props)
 
     this.state = {
-      selectedLanguage: "All",
-    };
+      selectedLanguage: 'All',
+      repos: null,
+      error: null
+    }
 
-    this.updateLanguage = this.updateLanguage.bind(this);
+    this.handleUpdateLanguage = this.handleUpdateLanguage.bind(this)
+    this.isLoading = this.isLoading.bind(this)
   }
-  updateLanguage(selectedLanguage) {
+
+  componentDidMount () {
+    this.handleUpdateLanguage(this.state.handleUpdateLanguage)
+  }
+
+  handleUpdateLanguage (selectedLanguage) {
     this.setState({
       selectedLanguage,
-    });
+      repos: null,
+      error: null
+    })
+    fetchPopularRepos(selectedLanguage)
+      .then(repos => this.setState({
+        selectedLanguage,
+        repos,
+        error: null
+      }))
+      .catch(error => {
+        console.warn('Error fetching repos: ', error)
+        this.setState({
+          error: 'Error fetching repos!'
+        })
+      })
   }
-  render() {
-    const { selectedLanguage } = this.state;
+
+  isLoading () {
+    return this.state.repos === null && this.state.error === null
+  }
+
+  render () {
+    const { selectedLanguage, repos, error } = this.state
     return (
-      <React.Fragment>
+      <>
         <LanguageNav
           selected={selectedLanguage}
-          onUpdateLanguage={this.updateLanguage}
+          onUpdateLanguage={this.handleUpdateLanguage}
         />
-      </React.Fragment>
-    );
+        {error && <p>Error⛔️</p>}
+        {this.isLoading() && <p>Loading😃</p>}
+        {repos && <pre>{JSON.stringify(repos, null, 2)}</pre>}
+      </>
+    )
   }
 }
