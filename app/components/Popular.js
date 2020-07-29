@@ -3,7 +3,7 @@ import propTypes from 'prop-types'
 import { fetchPopularRepos } from '../utils/api'
 import { FaUser, FaStar, FaCodeBranch, FaExclamationTriangle } from 'react-icons/fa'
 
-function LanguageNav ({ selected, onUpdateLanguage }) {
+function LanguageNav({ selected, onUpdateLanguage }) {
   const languages = ['All', 'JavaScript', 'Ruby', 'Java', 'CSS', 'Python']
   return (
     <ul className='flex-center'>
@@ -29,7 +29,7 @@ LanguageNav.propTypes = {
   onUpdateLanguage: propTypes.func.isRequired
 }
 
-function ReposGrid ({ repos }) {
+function ReposGrid({ repos }) {
   return (
     <ul className='grid space-around'>
       {repos.map((repo, index) => {
@@ -77,7 +77,7 @@ function ReposGrid ({ repos }) {
 }
 
 export default class Popular extends React.Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
     this.state = {
@@ -90,11 +90,11 @@ export default class Popular extends React.Component {
     this.isLoading = this.isLoading.bind(this)
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.handleUpdateLanguage(this.state.selectedLanguage)
   }
 
-  handleUpdateLanguage (selectedLanguage) {
+  handleUpdateLanguage(selectedLanguage) {
     this.setState({
       selectedLanguage,
       error: null
@@ -120,13 +120,13 @@ export default class Popular extends React.Component {
     }
   }
 
-  isLoading () {
+  isLoading() {
     const { selectedLanguage, repos, error } = this.state
 
     return !repos[selectedLanguage] === null && error === null
   }
 
-  render () {
+  render() {
     const { selectedLanguage, repos, error } = this.state
     return (
       <>
