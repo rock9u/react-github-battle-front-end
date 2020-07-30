@@ -161,22 +161,22 @@ export default class Battle extends React.Component {
               ? <PlayerInput
                 label='Player1'
                 onSubmit={(player) => this.handleSubmit('player1', player)}
-                />
+              />
               : <PlayerPreview
                 username={player1}
                 onReset={() => this.handleReset('player1')}
                 label='Player1'
-                />}
+              />}
             {player2 === null
               ? <PlayerInput
                 label='Player2'
                 onSubmit={(player) => this.handleSubmit('player2', player)}
-                />
+              />
               : <PlayerPreview
                 username={player2}
                 onReset={() => this.handleReset('player2')}
                 label='Player2'
-                />}
+              />}
           </div>
 
           {player1 && player2 && (
