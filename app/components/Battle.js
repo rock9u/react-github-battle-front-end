@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { FaUserFriends, FaFighterJet, FaTrophy, FaTimesCircle } from 'react-icons/fa'
 import Results from './Results'
 
-function Instructions() {
+function Instructions () {
   return (
     <div className='instructions-container'>
       <h1 className='center-text header-lg'>
@@ -28,7 +28,7 @@ function Instructions() {
 }
 
 class PlayerInput extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
@@ -37,22 +37,22 @@ class PlayerInput extends React.Component {
 
     this.handleChange = this.handleChange.bind(this)
     this.handleSubmit = this.handleSubmit.bind(this)
-
   }
 
-  handleSubmit(event) {
+  handleSubmit (event) {
     event.preventDefault()
     this.props.onSubmit(this.state.username)
   }
 
-  handleChange(event) {
+  handleChange (event) {
     this.setState({ username: event.target.value })
   }
 
-  render() {
+  render () {
     return (
       <form onSubmit={this.handleSubmit} className='column player'>
-        <label htmlFor='username'
+        <label
+          htmlFor='username'
           className='player-label'
         >
           {this.props.label}
@@ -67,7 +67,8 @@ class PlayerInput extends React.Component {
             value={this.state.username}
             onChange={this.handleChange}
           />
-          <button className='btn dark-btn'
+          <button
+            className='btn dark-btn'
             type='submit'
             disabled={!this.state.username}
           >
@@ -85,7 +86,7 @@ PlayerInput.propTypes = {
   label: PropTypes.string.isRequired
 }
 
-function PlayerPreview({ username, onReset, label }) {
+function PlayerPreview ({ username, onReset, label }) {
   return (
     <div className='column player'>
       <h3 className='player-label'>{label}</h3>
@@ -98,7 +99,8 @@ function PlayerPreview({ username, onReset, label }) {
           />
           <a
             href={`https://github.com/${username}`}
-            className='link'>
+            className='link'
+          >
             {username}
           </a>
         </div>
@@ -117,7 +119,7 @@ PlayerPreview.propTypes = {
 }
 
 export default class Battle extends React.Component {
-  constructor(props) {
+  constructor (props) {
     super(props)
 
     this.state = {
@@ -130,19 +132,19 @@ export default class Battle extends React.Component {
     this.handleReset = this.handleReset.bind(this)
   }
 
-  handleSubmit(id, player) {
+  handleSubmit (id, player) {
     this.setState({
       [id]: player
     })
   }
 
-  handleReset(id) {
+  handleReset (id) {
     this.setState({
       [id]: null
     })
   }
 
-  render() {
+  render () {
     const { player1, player2, battle } = this.state
     if (battle) {
       return <Results player1={player1} player2={player2} />
@@ -157,28 +159,25 @@ export default class Battle extends React.Component {
           <div className='row space-around'>
             {player1 === null
               ? <PlayerInput
-                label="Player1"
+                label='Player1'
                 onSubmit={(player) => this.handleSubmit('player1', player)}
-              />
+                />
               : <PlayerPreview
                 username={player1}
                 onReset={() => this.handleReset('player1')}
                 label='Player1'
-              />
-            }
+                />}
             {player2 === null
               ? <PlayerInput
-                label="Player2"
+                label='Player2'
                 onSubmit={(player) => this.handleSubmit('player2', player)}
-              />
+                />
               : <PlayerPreview
                 username={player2}
                 onReset={() => this.handleReset('player2')}
                 label='Player2'
-              />
-            }
+                />}
           </div>
-
 
           {player1 && player2 && (
             <button

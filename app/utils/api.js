@@ -1,13 +1,13 @@
-import Results from "../components/Results"
+import Results from '../components/Results'
 
-function getErrorMsg(message, username) {
+function getErrorMsg (message, username) {
   if (message === 'Not Found') {
     return `${username} doesn't exist`
   }
   return message
 }
 
-function getProfile(username) {
+function getProfile (username) {
   return fetch(`https://api.github.com/users/${username}`)
     .then((res) => res.json())
     .then((profile) => {
@@ -17,10 +17,9 @@ function getProfile(username) {
 
       return profile
     })
-
 }
 
-function getRepos(username) {
+function getRepos (username) {
   return fetch(`https://api.github.com/users/${username}/repos?per_page=100`)
     .then((res) => res.json())
     .then((repos) => {
@@ -32,19 +31,17 @@ function getRepos(username) {
     })
 }
 
-function getStartCount(repos) {
-
+function getStartCount (repos) {
   return (repos).reduce((count, { stargazers_count }) =>
     count + stargazers_count
-    , 0)
+  , 0)
 }
 
-function calculateScore(followers, repos) {
+function calculateScore (followers, repos) {
   return (followers * 3) + getStartCount(repos)
-
 }
 
-function getUserData(player) {
+function getUserData (player) {
   return Promise.all([getProfile(player), getRepos(player)])
     .then(([profile, repos]) => ({
       profile,
@@ -52,19 +49,18 @@ function getUserData(player) {
     }))
 }
 
-function sortPlayers(players) {
+function sortPlayers (players) {
   return players.sort((a, b) => b.score - a.score)
 }
 
-export function battle(players) {
+export function battle (players) {
   return Promise.all([
     getUserData(players[0]),
     getUserData(players[1])
   ]).then((results) => sortPlayers(results))
 }
 
-
-export function fetchPopularRepos(language) {
+export function fetchPopularRepos (language) {
   const endpoint = window.encodeURI(`https://api.github.com/search/repositories?q=stars:>1+language:${language}&sort=stars&order=desc&type=Repositories`)
 
   return fetch(endpoint)
