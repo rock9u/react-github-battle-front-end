@@ -42,6 +42,10 @@ li {
   background: transparent;
 }
 
+.nav li {
+  margin-right: 10px;
+}
+
 .nav-link {
   font-size: 18px;
   font-weight: bold;
@@ -52,6 +56,10 @@ li {
 .grid {
   display: flex;
   flex-wrap: wrap;
+}
+
+.space-between {
+  justify-content: space-between;
 }
 
 .space-around {
