@@ -9,10 +9,7 @@ import Nav from './components/Nav'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 
 class App extends React.Component {
-  constructor (props) {
-    super(props)
-
-    this.state = {
+    state = {
       theme: 'light',
       toggleTheme: () => {
         this.setState(({ theme }) => ({
@@ -20,7 +17,6 @@ class App extends React.Component {
         }))
       }
     }
-  }
 
   render () {
     return (
