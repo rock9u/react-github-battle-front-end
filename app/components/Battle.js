@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { FaUserFriends, FaFighterJet, FaTrophy, FaTimesCircle } from 'react-icons/fa'
 import Results from './Results'
 import { ThemeConsumer } from '../contexts/theme'
+import { Link } from 'react-router-dom'
 
 function Instructions () {
   return (
@@ -138,8 +139,7 @@ export default class Battle extends React.Component {
 
     this.state = {
       player1: null,
-      player2: null,
-      battle: false
+      player2: null
     }
 
     this.handleSubmit = this.handleSubmit.bind(this)
@@ -159,18 +159,8 @@ export default class Battle extends React.Component {
   }
 
   render () {
-    const { player1, player2, battle } = this.state
-    if (battle) {
-      return <Results
-        player1={player1}
-        player2={player2}
-        onReset={() => this.setState({
-          player1: null,
-          player2: null,
-          battle: false
-        })}
-      />
-    }
+    const { player1, player2 } = this.state
+
     return (
       <>
         <Instructions />
@@ -183,31 +173,34 @@ export default class Battle extends React.Component {
               ? <PlayerInput
                 label='Player1'
                 onSubmit={(player) => this.handleSubmit('player1', player)}
-                />
+              />
               : <PlayerPreview
                 username={player1}
                 onReset={() => this.handleReset('player1')}
                 label='Player1'
-                />}
+              />}
             {player2 === null
               ? <PlayerInput
                 label='Player2'
                 onSubmit={(player) => this.handleSubmit('player2', player)}
-                />
+              />
               : <PlayerPreview
                 username={player2}
                 onReset={() => this.handleReset('player2')}
                 label='Player2'
-                />}
+              />}
           </div>
 
           {player1 && player2 && (
-            <button
+            <Link
               className='btn dark-btn btn-space'
-              onClick={() => this.setState({ battle: true })}
+              to={{
+                pathname: '/battle/results',
+                search: `?player1=${player1}&player2=${player2}`
+              }}
             >
               Battle
-            </button>
+            </Link>
           )}
         </div>
 
