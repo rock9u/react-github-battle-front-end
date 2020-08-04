@@ -19,7 +19,9 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './app/index.html',
     }),
-    new CopyPlugin([{ from: '_redirects' }]),
+    new CopyPlugin({
+      patterns: [{ from: path.resolve(__dirname, '_redirects') }],
+    }),
   ],
   devServer: {
     historyApiFallback: true,
