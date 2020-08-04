@@ -65,7 +65,7 @@ export default class Results extends React.Component {
     const { player1, player2 } = queryString.parse(this.props.location.search)
 
     battle([player1, player2])
-      .then((players) => {
+      .then(players => {
         this.setState({
           winner: players[0],
           loser: players[1],
@@ -100,8 +100,7 @@ export default class Results extends React.Component {
             subheader={'Score: ' + winner.score.toLocaleString()}
             avatar={winner.profile.avatar_url}
             href={winner.profile.html_url}
-            name={winner.profile.login}
-          >
+            name={winner.profile.login}>
             <ProfileList profile={winner.profile} />
           </Card>
           <Card
@@ -109,8 +108,7 @@ export default class Results extends React.Component {
             subheader={'Score: ' + loser.score.toLocaleString()}
             avatar={loser.profile.avatar_url}
             href={loser.profile.html_url}
-            name={loser.profile.login}
-          >
+            name={loser.profile.login}>
             <ProfileList profile={loser.profile} />
           </Card>
         </div>
