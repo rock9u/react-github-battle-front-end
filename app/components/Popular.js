@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import propTypes from 'prop-types'
 import { fetchPopularRepos } from '../utils/api'
 import Card from './Card'
@@ -15,14 +15,13 @@ function LanguageNav({ selected, onUpdateLanguage }) {
   const languages = ['All', 'JavaScript', 'Ruby', 'Java', 'CSS', 'Python']
   return (
     <ul className="flex-center">
-      {languages.map((language) => {
+      {languages.map(language => {
         return (
           <li key={language}>
             <button
               className="btn-clear nav-link"
               style={language === selected ? { color: 'paleVioletRed' } : null}
-              onClick={() => onUpdateLanguage(language)}
-            >
+              onClick={() => onUpdateLanguage(language)}>
               {language}
             </button>
           </li>
@@ -57,8 +56,7 @@ function ReposGrid({ repos }) {
               header={`#${index + 1}`}
               avatar={avatar_url}
               href={html_url}
-              name={login}
-            >
+              name={login}>
               <ul className="card-list">
                 <li>
                   <Tooltip text="Github username">
@@ -87,62 +85,57 @@ function ReposGrid({ repos }) {
   )
 }
 
-export default class Popular extends React.Component {
-  state = {
-    selectedLanguage: 'All',
-    repos: {},
-    error: null,
-  }
-
-  componentDidMount() {
-    this.handleUpdateLanguage(this.state.selectedLanguage)
-  }
-
-  handleUpdateLanguage = (selectedLanguage) => {
-    this.setState({
-      selectedLanguage,
+const popularReducer = (state, action) => {
+  if (action.type === 'success') {
+    return {
+      ...state,
+      [action.selectedLanguage]: action.repos,
       error: null,
-    })
+    }
+  } else if (action.type === 'error') {
+    return {
+      ...state,
+      error: action.error.message,
+    }
+  } else {
+    throw new Error(`That action type isn't supported.`)
+  }
+}
 
-    if (!this.state.repos[selectedLanguage]) {
+export default function Popular() {
+  const [selectedLanguage, setSelectedLanguage] = React.useState('All')
+  const [state, dispatch] = React.useReducer(popularReducer, { error: null })
+
+  React.useEffect(() => {
+    if (!state[selectedLanguage]) {
       fetchPopularRepos(selectedLanguage)
-        .then((data) => {
-          this.setState(({ repos }) => ({
-            repos: {
-              ...repos,
-              [selectedLanguage]: data,
-            },
-          }))
+        .then(data => {
+          dispatch({ type: 'success', selectedLanguage, repos: data })
         })
-        .catch((error) => {
-          console.warn('Error fetching repos: ', error)
-          this.setState({
-            error: 'Error fetching repos!',
+        .catch(error => {
+          dispatch({
+            type: 'error',
+            error,
           })
         })
+    } else {
+      console.log('api is not called')
     }
+  }, [selectedLanguage])
+
+  const isLoading = () => {
+    return !state[selectedLanguage] && state.error === null
   }
 
-  isLoading = () => {
-    const { selectedLanguage, repos, error } = this.state
-
-    return !repos[selectedLanguage] && error === null
-  }
-
-  render() {
-    const { selectedLanguage, repos, error } = this.state
-    return (
-      <>
-        <LanguageNav
-          selected={selectedLanguage}
-          onUpdateLanguage={this.handleUpdateLanguage}
-        />
-        {error && <p className="center-text error">Error⛔️</p>}
-        {this.isLoading() && <Loading text="Fetching Repo😃" />}
-        {repos[selectedLanguage] && (
-          <ReposGrid repos={repos[selectedLanguage]} />
-        )}
-      </>
-    )
-  }
+  return (
+    <>
+      <LanguageNav
+        selected={selectedLanguage}
+        onUpdateLanguage={setSelectedLanguage}
+      />
+      {state.error && <p className="center-text error">{state.error}⛔️</p>}
+      {isLoading() && <Loading text="Fetching Repo😃" />}
+      {state[selectedLanguage] && <ReposGrid repos={state[selectedLanguage]} />}
+    </>
+  )
 }

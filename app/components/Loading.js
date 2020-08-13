@@ -10,26 +10,20 @@ const styles = {
     textAlign: 'center',
   },
 }
-export default class Loading extends React.Component {
-  state = { content: this.props.text }
+export default function Loading({ speed, text }) {
+  const [content, setContent] = React.useState(text)
+  const interval = React.useRef()
 
-  componentDidMount() {
-    const { speed, text } = this.props
+  React.useEffect(() => {
     // setInterval will keep executing
-    this.interval = window.setInterval(() => {
-      this.state.content === text + '...'
-        ? this.setState({ content: text })
-        : this.setState(({ content }) => ({ content: content + '.' }))
+    interval.current = window.setInterval(() => {
+      content === text + '...' ? setContent(text) : setContent(old => old + '.')
     }, speed)
-  }
 
-  componentWillMount() {
-    window.clearInterval(this.interval)
-  }
+    return () => window.clearInterval(interval.current)
+  }, [])
 
-  render() {
-    return <p style={styles.content}>{this.state.content}</p>
-  }
+  return <p style={styles.content}>{content}</p>
 }
 
 Loading.propTypes = {
