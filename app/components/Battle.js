@@ -13,7 +13,7 @@ import { Link } from 'react-router-dom'
 function Instructions() {
   return (
     <ThemeConsumer>
-      {({ theme }) => (
+      {theme => (
         <div className="instructions-container">
           <h1 className="center-text header-lg">Instructions</h1>
           <ol className="container-sm grid center-text battle-instructions">
@@ -53,19 +53,19 @@ class PlayerInput extends React.Component {
     username: '',
   }
 
-  handleSubmit = (event) => {
+  handleSubmit = event => {
     event.preventDefault()
     this.props.onSubmit(this.state.username)
   }
 
-  handleChange = (event) => {
+  handleChange = event => {
     this.setState({ username: event.target.value })
   }
 
   render() {
     return (
       <ThemeConsumer>
-        {({ theme }) => (
+        {theme => (
           <form onSubmit={this.handleSubmit} className="column player">
             <label htmlFor="username" className="player-label">
               {this.props.label}
@@ -83,8 +83,7 @@ class PlayerInput extends React.Component {
               <button
                 className={`btn ${theme === 'dark' ? 'light-btn' : 'dark-btn'}`}
                 type="submit"
-                disabled={!this.state.username}
-              >
+                disabled={!this.state.username}>
                 Submit
               </button>
             </div>
@@ -103,7 +102,7 @@ PlayerInput.propTypes = {
 function PlayerPreview({ username, onReset, label }) {
   return (
     <ThemeConsumer>
-      {({ theme }) => (
+      {theme => (
         <div className="column player">
           <h3 className="player-label">{label}</h3>
           <div className={`row bg-${theme}`}>
@@ -145,7 +144,7 @@ export default class Battle extends React.Component {
     })
   }
 
-  handleReset = (id) => {
+  handleReset = id => {
     this.setState({
       [id]: null,
     })
@@ -164,7 +163,7 @@ export default class Battle extends React.Component {
             {player1 === null ? (
               <PlayerInput
                 label="Player1"
-                onSubmit={(player) => this.handleSubmit('player1', player)}
+                onSubmit={player => this.handleSubmit('player1', player)}
               />
             ) : (
               <PlayerPreview
@@ -176,7 +175,7 @@ export default class Battle extends React.Component {
             {player2 === null ? (
               <PlayerInput
                 label="Player2"
-                onSubmit={(player) => this.handleSubmit('player2', player)}
+                onSubmit={player => this.handleSubmit('player2', player)}
               />
             ) : (
               <PlayerPreview
@@ -193,8 +192,7 @@ export default class Battle extends React.Component {
               to={{
                 pathname: '/battle/results',
                 search: `?player1=${player1}&player2=${player2}`,
-              }}
-            >
+              }}>
               Battle
             </Link>
           )}

@@ -6,10 +6,10 @@ const activeStyle = {
   color: 'rgb(187, 46, 31)',
 }
 
-export default function Nav() {
+export default function Nav({ toggleTheme }) {
   return (
     <ThemeConsumer>
-      {({ theme, toggleTheme }) => (
+      {theme => (
         <nav className="row space-between">
           <ul>
             <li />
@@ -17,24 +17,21 @@ export default function Nav() {
               to="/"
               exact
               activeStyle={activeStyle}
-              className="nav-link"
-            >
+              className="nav-link">
               Popular
             </NavLink>
             <li />
             <NavLink
               to="/battle"
               activeStyle={activeStyle}
-              className="nav-link"
-            >
+              className="nav-link">
               Battle
             </NavLink>
           </ul>
           <button
             style={{ fontSize: 30 }}
             className="btn-clear"
-            onClick={toggleTheme}
-          >
+            onClick={toggleTheme}>
             {theme === 'light' ? '🔦' : '💡'}
           </button>
         </nav>
